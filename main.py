@@ -13,7 +13,7 @@ FRAME_RADIUS = 15E-3
 FRAME_AREA, FRAME_INERTIA = np.pi * (FRAME_RADIUS ** 2), np.pi * (FRAME_RADIUS ** 4) / 4  # Frame properties
 E1, v1, E2, v2 = 200E9, 0.3, 210E9, 0.25  # Young's modulus and Poisson's ratio
 
-# ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯ The frame
+# ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯ The frame
 # Defining frame nodes and elements
 frame_nodes = {1: Node(number=1, position=(0, 0), force=(np.nan, np.nan, np.nan), displacement=(0, 0, 0)),
                2: Node(number=2, position=(0, 5), force=(0, 0, 0), displacement=(np.nan, np.nan, np.nan)),
@@ -26,7 +26,7 @@ frame_local_k = dict()
 for e in frame_elems:
     frame_local_k[e] = frame_k_matrix(frame_elems[e], frame_nodes)
 
-# ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯ The sign
+# ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯ The sign
 # Creating load boundary condition
 load_bc = create_load_bc(start_position=(2, 5), l=SIGN_L, w=SIGN_W, m=m, P=P)
 # Meshing the sign
@@ -39,11 +39,11 @@ sign_local_k = dict()
 for e in sign_elems.values():
     sign_local_k[e.number] = q4_k_matrix(e, sign_nodes)
 
-# ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯ The Transition element
+# ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯ The Transition element
 trans_element = {e_start_num - 1: Element(number=e_start_num - 1, nodes=(3, 5, 4), young=E1)}
 trans_k = {e_start_num - 1: trans_k_matrix(b=SIGN_W / n, h=SIGN_W / n, E=E1, v=v1, stress_mode=STRESS_MODE, thickness=SIGN_T)}
 
-# ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯ Global assembly
+# ◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯◯ Global assembly
 nodes = frame_nodes | sign_nodes
 elements = frame_elems | trans_element | sign_elems
 local_k = frame_local_k | trans_k | sign_local_k
